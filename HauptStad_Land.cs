@@ -9,137 +9,79 @@ namespace NguyenLe_QuizProject
     public partial class HauptStad_Land : Form
     {
         private int questionNr = 0;
-
+        Random random = new Random();
         private Einstellung parentForm;
         private Game game;
         private User user;
         private Database db = new Database();
         private List<Land> lands;
-        private Dictionary<string, string> correctAnswer = new Dictionary<string, string>();
-        private RadioButton[] answers = new RadioButton[4];
+        private int gameMode;
+        private RadioButton[] answersButtons = new RadioButton[4];
 
-        private int numberOfQuestion;
-
-        public HauptStad_Land(User user, Einstellung parentForm, int numberOfQuestion)
+        private Bitmap[] flags = {Properties.Resources.Belgium, Properties.Resources.Brazil, Properties.Resources.Cameroon, Properties.Resources.China,
+                                Properties.Resources.France,Properties.Resources.Germany,Properties.Resources.India,Properties.Resources.Iraq,
+                                Properties.Resources.Japan,Properties.Resources.Libya,Properties.Resources.Nigeria,Properties.Resources.North_Korea,
+                                Properties.Resources.Portugal,Properties.Resources.United_Kingdom,Properties.Resources.United_States_of_America,
+                                Properties.Resources.Vietnam};
+        
+        public HauptStad_Land(User user, Einstellung parentForm, int gameMode)
         {
-            this.numberOfQuestion = numberOfQuestion;
+
+            this.gameMode = gameMode;
             this.parentForm = parentForm;
             this.user = user;
             this.game = new Game(0, user.UserID, System.DateTime.Now);
             InitializeComponent();
 
             labelUser.Text = string.Format("Wilkommen, {0}, bitte folgende Fragen beanworten.", user.Name);
-
+            labelFrageNr.Text = "Frage Nr." + (questionNr + 1);
             //Assign each radioButton to the coresponding index in Array
-            answers[0] = radioButton1;
-            answers[1] = radioButton2;
-            answers[2] = radioButton3;
-            answers[3] = radioButton4;
+            answersButtons[0] = radioButton1;
+            answersButtons[1] = radioButton2;
+            answersButtons[2] = radioButton3;
+            answersButtons[3] = radioButton4;
+            // Get listLand from DB
             getLands();
-            generateQuestionAndAnswer(correctAnswer);
+            // assign flag
+            for (int i = 0; i < lands.Count(); i++)
+            {
+                lands[i].Flag = flags[i];
+            }
+            shuffleLand(lands);
+            // Show question/answer based on game mode selected from parent form
+            switch (gameMode)
+            {
+                case 1:
+                    generateQuestionAndAnswerMode1(questionNr);
+                    break;
+                case 2:
+                    generateQuestionAndAnswerMode2(questionNr);
+                    break;
+                case 3:
+                    generateQuestionAndAnswerMode3(questionNr);
+                    break;
+                case 4:
+                    generateQuestionAndAnswerMode4(questionNr);
+                    break;
+                case 5:
+                    generateQuestionAndAnswerMode5(questionNr);
+                    break;
+                case 6:
+                    generateQuestionAndAnswerMode6(questionNr);
+                    break;
+            }
         }
+
+        #region Internal Function
         private void getLands()
         {
             lands = db.getListLand();
-            for (int i = 0; i < numberOfQuestion; i++)
-            {
-                correctAnswer.Add(lands[i].Name, lands[i].Capital);
-            }
-        }
-        private void generateQuestionAndAnswer(Dictionary<string, string> correctAnswer)
-        {
-            // Nur wen es gibt noch was zum fragen bzw. antworten
-            if (questionNr <= numberOfQuestion)
-            {
-                if (numberOfQuestion - questionNr == 1)
-                {
-                    buttonNext.Text = "Ende";
-                }
-                Random random = new Random();
-                // Random type der Frage: Haupstadt -> Land oder Land -> Haupstadt
-
-                int landOrCapital = random.Next(2);
-                if (landOrCapital == 0)
-                {
-                    labelFrage.Text = string.Format("Das Land mit der Hauptstadt {0} ist:", correctAnswer.ElementAt(questionNr).Value); //Import System.Linq
-                                                                                                                                        // assign correct answer to radioButton1
-                    radioButton1.Text = correctAnswer.ElementAt(questionNr).Key;
-
-                    List<int> listIndex = new List<int>();
-                    listIndex.Add(questionNr);
-
-                    int index;
-
-
-                    for (int i = 1; i < 4; i++)
-                    {
-                        do
-                        {
-                            index = random.Next(lands.Count);
-                        } while (listIndex.Contains(index));
-                        listIndex.Add(index);
-                    }
-
-
-                    for (int i = 1; i < answers.Length; i++)
-                    {
-                        answers[i].Text = lands[listIndex[i]].Name;
-                    }
-
-                }
-                else
-                {
-                    labelFrage.Text = string.Format("Die Haupstadt von {0} ist:", correctAnswer.ElementAt(questionNr).Key);
-                    // antwort generiert, in radiobutton
-                    radioButton1.Text = correctAnswer.ElementAt(questionNr).Value;
-
-                    List<int> listIndex = new List<int>();
-                    listIndex.Add(questionNr);
-
-                    int index;
-
-                    for (int i = 1; i < 4; i++)
-                    {
-                        do
-                        {
-                            index = random.Next(lands.Count);
-                        } while (listIndex.Contains(index));
-                        listIndex.Add(index);
-                    }
-
-
-                    for (int i = 1; i < answers.Length; i++)
-                    {
-                        answers[i].Text = lands[listIndex[i]].Capital;
-                    }
-
-                }
-            }
-
-
-            shuffleAnswer(answers);  // antwort generiert, in radi
         }
 
-        private bool isRepeat(int[] index)
-        {
-            bool result = false;
-            for (int i = 0; i < index.Length; i++)
-            {
-                for (int j = 1 + 1; j < index.Length; j++)
-                {
-                    if (index[i] == index[j])
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
-
+        //Shuffle function, shuffle posstion of the radioButton
         private void shuffleAnswer(RadioButton[] answers)
         {
-            Random random = new Random();
+
             Point temp = new Point();
 
             for (int i = 0; i < 4; i++)
@@ -150,7 +92,254 @@ namespace NguyenLe_QuizProject
                 answers[randomIndex].Location = temp;
             }
         }
+        // Shuffle funcntion for randomness
+        private void shuffleLand(List<Land> lands)
+        {
+            Land temp = new Land("temp", "temp", "temp");
+            for (int i = 0; i < lands.Count(); i++)
+            {
+                temp = lands[i];
+                int randomIndex = random.Next(lands.Count());
+                lands[i] = lands[randomIndex];
+                lands[randomIndex] = temp;
+            }
+        }
 
+        private void generateQuestionAndAnswerMode1(int questionNr)
+        {
+            questionNr = this.questionNr;
+            if (questionNr < 10)
+            {
+                {
+                    labelFrage.Text = string.Format("{0} ist die Hauptstadt von:", lands[questionNr].Capital);
+                    radioButton1.Text = lands[questionNr].Name;
+                    // Hide pictureBox
+                    pictureBoxFrage.Visible = false;
+
+                    // Randomize possible answer from list Land, using another List of index
+                    List<int> listIndex = new List<int>();
+                    listIndex.Add(questionNr);
+
+                    int index;
+                    // Add random unique index from lands.Count to listIndex
+                    for (int i = 0; i < 4; i++)
+                    {
+                        do
+                        {
+                            index = random.Next(lands.Count);
+                        } while (listIndex.Contains(index));
+                        listIndex.Add(index);
+                    }
+
+                    // Assign Text to radioButton2 to 4
+                    for (int i = 1; i < answersButtons.Length; i++)
+                    {
+                        answersButtons[i].Text = lands[listIndex[i]].Name;
+                    }
+                }
+            }
+            shuffleAnswer(answersButtons);
+        }
+
+        private void generateQuestionAndAnswerMode2(int questionNr)
+        {
+
+            questionNr = this.questionNr;
+            if (questionNr < 10)
+            {
+                {
+                    labelFrage.Text = string.Format("Die Hauptstadt von {0} ist:", lands[questionNr].Name);
+                    radioButton1.Text = lands[questionNr].Capital;
+                    pictureBoxFrage.Visible = false;
+                    // Hide pictureBox
+
+
+                    // Randomize possible answer from list Land, using another List of index
+                    List<int> listIndex = new List<int>();
+                    listIndex.Add(questionNr);
+
+                    int index;
+                    // Add random unique index from lands.Count to listIndex
+                    for (int i = 0; i < 4; i++)
+                    {
+                        do
+                        {
+                            index = random.Next(lands.Count);
+                        } while (listIndex.Contains(index));
+                        listIndex.Add(index);
+                    }
+
+                    // Assign Text to radioButton2 to 4
+                    for (int i = 1; i < answersButtons.Length; i++)
+                    {
+                        answersButtons[i].Text = lands[listIndex[i]].Capital;
+                    }
+                }
+            }
+            shuffleAnswer(answersButtons);
+        }
+
+        private void generateQuestionAndAnswerMode3(int questionNr)
+        {
+            // Nur wen es gibt noch was zum fragen bzw. antworten
+            questionNr = this.questionNr;
+            if (questionNr < 10)
+            {
+                {
+                    labelFrage.Text = string.Format("ist die Flag von: ");
+
+                    labelFrage.Location = new Point(170, 92);
+                    radioButton1.Text = lands[questionNr].Name;
+                    pictureBoxFrage.Image = lands[questionNr].Flag;
+
+                    // Hide pictureBox
+
+
+                    // Randomize possible answer from list Land, using another List of index
+                    List<int> listIndex = new List<int>();
+                    listIndex.Add(questionNr);
+
+                    int index;
+                    // Add random unique index from lands.Count to listIndex
+                    for (int i = 0; i < 4; i++)
+                    {
+                        do
+                        {
+                            index = random.Next(lands.Count);
+                        } while (listIndex.Contains(index));
+                        listIndex.Add(index);
+                    }
+
+                    // Assign Text to radioButton2 to 4
+                    for (int i = 1; i < answersButtons.Length; i++)
+                    {
+                        answersButtons[i].Text = lands[listIndex[i]].Name;
+                    }
+                }
+            }
+            shuffleAnswer(answersButtons);
+        }
+
+        private void generateQuestionAndAnswerMode4(int questionNr)
+        {
+            questionNr = this.questionNr;
+            if (questionNr < 10)
+            {
+                {
+                    labelFrage.Text = string.Format("Die Flag von {0} ist: ", lands[questionNr].Name);
+
+
+                    pictureBoxFrage.Visible = false;
+
+
+                    radioButton1.Image = lands[questionNr].Flag;
+
+                    // Randomize possible answer from list Land, using another List of index
+                    List<int> listIndex = new List<int>();
+                    listIndex.Add(questionNr);
+
+                    int index;
+                    // Add random unique index from lands.Count to listIndex
+                    for (int i = 0; i < 4; i++)
+                    {
+                        do
+                        {
+                            index = random.Next(lands.Count);
+                        } while (listIndex.Contains(index));
+                        listIndex.Add(index);
+                    }
+
+                    // Assign Text to radioButton2 to 4
+                    for (int i = 1; i < answersButtons.Length; i++)
+                    {
+                        answersButtons[i].Image = lands[listIndex[i]].Flag;
+                    }
+                }
+            }
+
+            shuffleAnswer(answersButtons);
+        }
+
+        private void generateQuestionAndAnswerMode5(int questionNr)
+        {
+            questionNr = this.questionNr;
+            if (questionNr < 10)
+            {
+                {
+                    labelFrage.Text = string.Format("ist die Flagge des Landes, das die \nHauptstadt ist: ");
+
+                    labelFrage.Location = new Point(170, 92);
+                    pictureBoxFrage.Visible = true;
+                    pictureBoxFrage.Image = lands[questionNr].Flag;
+                    radioButton1.Text = lands[questionNr].Capital;
+
+                    // Randomize possible answer from list Land, using another List of index
+                    List<int> listIndex = new List<int>();
+                    listIndex.Add(questionNr);
+
+                    int index;
+                    // Add random unique index from lands.Count to listIndex
+                    for (int i = 0; i < 4; i++)
+                    {
+                        do
+                        {
+                            index = random.Next(lands.Count);
+                        } while (listIndex.Contains(index));
+                        listIndex.Add(index);
+                    }
+
+                    // Assign Text to radioButton2 to 4
+                    for (int i = 1; i < answersButtons.Length; i++)
+                    {
+                        answersButtons[i].Text = lands[listIndex[i]].Capital;
+                    }
+                }
+            }
+
+            shuffleAnswer(answersButtons);
+        }
+        private void generateQuestionAndAnswerMode6(int questionNr)
+        {
+            questionNr = this.questionNr;
+            if (questionNr < 10)
+            {
+                {
+                    labelFrage.Text = string.Format("Das Land, dessen Hauptstadt {0} heißt, \nhat die Flagge:: ", lands[questionNr].Capital);
+
+
+                    pictureBoxFrage.Visible = false;
+
+                    radioButton1.Image = lands[questionNr].Flag;
+
+                    // Randomize possible answer from list Land, using another List of index
+                    List<int> listIndex = new List<int>();
+                    listIndex.Add(questionNr);
+
+                    int index;
+                    // Add random unique index from lands.Count to listIndex
+                    for (int i = 0; i < 4; i++)
+                    {
+                        do
+                        {
+                            index = random.Next(lands.Count);
+                        } while (listIndex.Contains(index));
+                        listIndex.Add(index);
+                    }
+
+                    // Assign Text to radioButton2 to 4
+                    for (int i = 1; i < answersButtons.Length; i++)
+                    {
+                        answersButtons[i].Image = lands[listIndex[i]].Flag;
+                    }
+                }
+            }
+
+            shuffleAnswer(answersButtons);
+        }
+        #endregion
+
+
+        #region Event Handler
         private void buttonZumEinstellung_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -159,28 +348,67 @@ namespace NguyenLe_QuizProject
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-            // reset radioButton text
             if (radioButton1.Checked)
-                MessageBox.Show("richtig", "Gut", MessageBoxButtons.OK);
-            foreach (RadioButton button in answers)
             {
-                button.Text = "";
+                MessageBox.Show("richtig", "Gut", MessageBoxButtons.OK);
+                game.Score++;
             }
-            Array.Clear(answers, 0, answers.Length);
-            answers[0] = radioButton1;
-            answers[1] = radioButton2;
-            answers[2] = radioButton3;
-            answers[3] = radioButton4;
-            foreach (var item in answers)
+
+            foreach (var item in answersButtons)
             {
                 item.TabStop = false;
                 item.Checked = false;
 
             }
-            generateQuestionAndAnswer(correctAnswer);
+
+
             questionNr++;
+            labelFrageNr.Text = "Frage Nr." + (questionNr + 1);
+            if (questionNr == 9)
+            {
+                buttonNext.Text = "Ende";
+            }
+            // reset radioButton text
+            switch (gameMode)
+            {
+                case 1:
+                    generateQuestionAndAnswerMode1(questionNr);
+                    break;
+                case 2:
+                    generateQuestionAndAnswerMode2(questionNr);
+                    break;
+                case 3:
+                    generateQuestionAndAnswerMode3(questionNr);
+                    break;
+                case 4:
+                    generateQuestionAndAnswerMode4(questionNr);
+                    break;
+                case 5:
+                    generateQuestionAndAnswerMode5(questionNr);
+                    break;
+                case 6:
+                    generateQuestionAndAnswerMode6(questionNr);
+                    break;
+            }
+
+            // Ende der Quiz 
+            if (questionNr == 10)
+            {
+                if (radioButton1.Checked)
+                {
+                    MessageBox.Show("richtig", "Gut", MessageBoxButtons.OK);
+                    game.Score++;
+                }
+                // MesseageBox at the end of game, with User and Score
+                MessageBox.Show(string.Format("Benutzer: {0}, Punkte {1}", user.Name, game.Score), "Fertig!", MessageBoxButtons.OK);
+                // Save game to DB and close Form
+                db.addGame(game);
+                this.Close();
+                // Show back parent form
+                parentForm.Show();
+
+            }
         }
+        #endregion
     }
 }
-
-

@@ -16,7 +16,7 @@ namespace NguyenLe_QuizProject
 
         }
 
-
+        #region getList of ..
         internal List<User> getUser()
         {
             List<User> users = new List<User>();
@@ -53,15 +53,15 @@ namespace NguyenLe_QuizProject
             {
                 connection.Open();
                 MySqlCommand command = connection.CreateCommand();
-                command.CommandText = string.Format("SELECT * FROM land ORDER BY RAND();"); //Später hier kann User entscheiden, wie viele Fragen
+                command.CommandText = string.Format("SELECT * FROM land ORDER BY name;"); //Später hier kann User entscheiden, wie viele Fragen
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     lands.Add(new Land(
-                        reader.IsDBNull(0) ? -1: reader.GetInt32(0),
-                        reader.IsDBNull(1)? "Land": reader.GetString(1),
-                        reader.IsDBNull(2)? "Capital": reader.GetString(2),
-                        reader.IsDBNull(3)? "Continent": reader.GetString(3))
+                        reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
+                        reader.IsDBNull(1) ? "Land" : reader.GetString(1),
+                        reader.IsDBNull(2) ? "Capital" : reader.GetString(2),
+                        reader.IsDBNull(3) ? "Continent" : reader.GetString(3))
                         );
                 }
             }
@@ -76,6 +76,41 @@ namespace NguyenLe_QuizProject
             return lands;
         }
 
+        internal List<Statistic> getStatistic()
+        {
+            List<Statistic> statistics = new List<Statistic>();
+            try
+            {
+                connection.Open();
+                MySqlCommand command = connection.CreateCommand();
+                command.CommandText = "SELECT user.name, game.score, game.date" +
+                    " from user inner join game on user.userID = game.userID" +
+                    " order by game.score desc;";
+                MySqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    statistics.Add(new Statistic(
+                        reader.IsDBNull(0) ? "user" : reader.GetString(0),
+                        reader.IsDBNull(1) ? -1 : reader.GetInt32(1),
+                        reader.IsDBNull(2) ? "Datum" : reader.GetString(2)
+                        ));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return statistics;
+        }
+        #endregion
+
+        #region addNew
         internal void addNewUser(User user)
         {
             try
@@ -83,6 +118,26 @@ namespace NguyenLe_QuizProject
                 connection.Open();
                 MySqlCommand command = connection.CreateCommand();
                 command.CommandText = string.Format("INSERT INTO user VALUES(null, '{0}');", user.Name);
+                command.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        internal void addGame(Game game)
+        {
+            try
+            {
+                connection.Open();
+                MySqlCommand command = connection.CreateCommand();
+                command.CommandText = string.Format("INSERT INTO game VALUES(null, {0}, '{1}', {2});", game.Score, game.Date.ToString("yyyy-MM-dd HH:mm:ss"), game.UserID);
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -94,5 +149,6 @@ namespace NguyenLe_QuizProject
                 connection.Close();
             }
         }
+        #endregion
     }
 }
