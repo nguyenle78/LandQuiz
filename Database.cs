@@ -61,7 +61,7 @@ namespace NguyenLe_QuizProject
                         reader.IsDBNull(0) ? -1 : reader.GetInt32(0),
                         reader.IsDBNull(1) ? "Land" : reader.GetString(1),
                         reader.IsDBNull(2) ? "Capital" : reader.GetString(2),
-                        reader.IsDBNull(3) ? "Continent" : reader.GetString(3))
+                        reader.IsDBNull(3) ? -1 : reader.GetInt32(3))
                         );
                 }
             }

@@ -7,27 +7,28 @@ namespace NguyenLe_QuizProject
         private int landID;
         private string name;
         private string capital;
-        private string continent;
+        private int continent;
         private Bitmap flag;
 
-        public Land(string name, string capital, string continent)
+        public Land(string name, string capital, int continent)
         {
-            this.Name = name;
-            this.Capital = capital;
+            this.name = name;
+            this.capital = capital;
             this.Continent = continent;
         }
 
-        public Land(int landID, string name, string capital, string continent)
+        public Land(int landID, string name, string capital, int continent)
         {
             this.landID = landID;
             this.name = name;
             this.capital = capital;
-            this.continent = continent;
+            this.Continent = continent;
         }
 
         public string Name { get => name; set => name = value; }
         public string Capital { get => capital; set => capital = value; }
-        public string Continent { get => continent; set => continent = value; }
+
         public Bitmap Flag { get => flag; set => flag = value; }
+        public int Continent { get => continent; set => continent = value; }
     }
 }

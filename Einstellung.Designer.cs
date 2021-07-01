@@ -43,6 +43,8 @@ namespace NguyenLe_QuizProject
             this.textBoxNewUser = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.comboBoxContinent = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,9 +68,9 @@ namespace NguyenLe_QuizProject
             // 
             // buttonNext
             // 
-            this.buttonNext.Location = new System.Drawing.Point(19, 284);
+            this.buttonNext.Location = new System.Drawing.Point(122, 313);
             this.buttonNext.Name = "buttonNext";
-            this.buttonNext.Size = new System.Drawing.Size(124, 49);
+            this.buttonNext.Size = new System.Drawing.Size(124, 38);
             this.buttonNext.TabIndex = 1;
             this.buttonNext.Text = "Weiter";
             this.buttonNext.UseVisualStyleBackColor = true;
@@ -90,7 +92,7 @@ namespace NguyenLe_QuizProject
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(13, 135);
+            this.groupBox1.Location = new System.Drawing.Point(13, 113);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(382, 130);
             this.groupBox1.TabIndex = 4;
@@ -190,9 +192,12 @@ namespace NguyenLe_QuizProject
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(412, 404);
             this.tabControl1.TabIndex = 7;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.comboBoxContinent);
+            this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.buttonNext);
             this.tabPage1.Controls.Add(this.textBoxNewUser);
             this.tabPage1.Controls.Add(this.label1);
@@ -206,6 +211,30 @@ namespace NguyenLe_QuizProject
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Einstellung";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxContinent
+            // 
+            this.comboBoxContinent.FormattingEnabled = true;
+            this.comboBoxContinent.Items.AddRange(new object[] {
+            "Alle",
+            "Europa",
+            "Asia",
+            "Africa",
+            "North America",
+            "South America"});
+            this.comboBoxContinent.Location = new System.Drawing.Point(79, 254);
+            this.comboBoxContinent.Name = "comboBoxContinent";
+            this.comboBoxContinent.Size = new System.Drawing.Size(86, 23);
+            this.comboBoxContinent.TabIndex = 8;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 257);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 15);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Continent";
             // 
             // tabPage2
             // 
@@ -289,6 +318,8 @@ namespace NguyenLe_QuizProject
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.ComboBox comboBoxContinent;
+        private System.Windows.Forms.Label label2;
     }
 }
 

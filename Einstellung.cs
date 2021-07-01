@@ -8,14 +8,16 @@ namespace NguyenLe_QuizProject
     {
         private Database database = new Database();
         private List<User> users;
-        private List<Land> lands;
         private List<Statistic> statistics;
 
         public Einstellung()
         {
             InitializeComponent();
             showUser();
-            showStatistic();
+            // Default selection user. 
+            comboBoxContinent.SelectedIndex = 0;
+            // Default selection mode is all Continent
+            comboBoxUser.SelectedIndex = 0;
         }
 
         private void showStatistic()
@@ -24,7 +26,6 @@ namespace NguyenLe_QuizProject
             foreach (Statistic statistic in statistics)
             {
                 dataGridView1.Rows.Add(statistic.User, statistic.Score, statistic.Datum);
-
             }
         }
 
@@ -41,18 +42,22 @@ namespace NguyenLe_QuizProject
 
         private void buttonNeuUser_Click(object sender, EventArgs e)
         {
-            try
+            // Prevent enter empty name User
+            if (textBoxNewUser.Text != "")
             {
-                User newUser = new User(textBoxNewUser.Text);
-                database.addNewUser(newUser);
-                MessageBox.Show("Neu Spieler hinzugefügt", "Neu Spieler", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                try
+                {
+                    User newUser = new User(textBoxNewUser.Text);
+                    database.addNewUser(newUser);
+                    MessageBox.Show("Neu Spieler hinzugefügt", "Neu Spieler", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                showUser();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                throw;
+                    showUser();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
             }
         }
 
@@ -80,15 +85,22 @@ namespace NguyenLe_QuizProject
                 gameMode = 5;
             }
             else
-            {
                 gameMode = 6;
-            }
+            int continent;
+
+            continent = comboBoxContinent.SelectedIndex;           
 
             User user = users[comboBoxUser.SelectedIndex];
-            HauptStad_Land newGame = new HauptStad_Land(user, this, gameMode);
+            HauptStad_Land newGame = new HauptStad_Land(user, this, gameMode,continent);
             // hier werden später mit Spiel Modus wahlbar
             this.Hide();
             newGame.Show();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            dataGridView1.Rows.Clear();
+            showStatistic();
         }
     }
 }
