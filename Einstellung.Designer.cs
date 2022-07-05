@@ -46,6 +46,8 @@ namespace NguyenLe_QuizProject
             this.comboBoxContinent = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.radioButton8 = new System.Windows.Forms.RadioButton();
+            this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -238,6 +240,8 @@ namespace NguyenLe_QuizProject
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.radioButton8);
+            this.tabPage2.Controls.Add(this.radioButton7);
             this.tabPage2.Controls.Add(this.dataGridView1);
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
@@ -246,6 +250,30 @@ namespace NguyenLe_QuizProject
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Statistik";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton8
+            // 
+            this.radioButton8.AutoSize = true;
+            this.radioButton8.Location = new System.Drawing.Point(208, 315);
+            this.radioButton8.Name = "radioButton8";
+            this.radioButton8.Size = new System.Drawing.Size(117, 19);
+            this.radioButton8.TabIndex = 2;
+            this.radioButton8.Text = "Aktuelle Benutzer";
+            this.radioButton8.UseVisualStyleBackColor = true;
+            this.radioButton8.CheckedChanged += new System.EventHandler(this.radioButton8_CheckedChanged);
+            // 
+            // radioButton7
+            // 
+            this.radioButton7.AutoSize = true;
+            this.radioButton7.Checked = true;
+            this.radioButton7.Location = new System.Drawing.Point(69, 315);
+            this.radioButton7.Name = "radioButton7";
+            this.radioButton7.Size = new System.Drawing.Size(45, 19);
+            this.radioButton7.TabIndex = 1;
+            this.radioButton7.TabStop = true;
+            this.radioButton7.Text = "Alle";
+            this.radioButton7.UseVisualStyleBackColor = true;
+            this.radioButton7.CheckedChanged += new System.EventHandler(this.radioButton8_CheckedChanged);
             // 
             // dataGridView1
             // 
@@ -282,8 +310,10 @@ namespace NguyenLe_QuizProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 428);
+            this.ClientSize = new System.Drawing.Size(424, 431);
             this.Controls.Add(this.tabControl1);
+            this.MaximumSize = new System.Drawing.Size(440, 470);
+            this.MinimumSize = new System.Drawing.Size(440, 470);
             this.Name = "Einstellung";
             this.Text = "Einstellung";
             this.groupBox1.ResumeLayout(false);
@@ -292,6 +322,7 @@ namespace NguyenLe_QuizProject
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -320,6 +351,8 @@ namespace NguyenLe_QuizProject
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.ComboBox comboBoxContinent;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RadioButton radioButton8;
+        private System.Windows.Forms.RadioButton radioButton7;
     }
 }
 

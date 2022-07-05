@@ -162,7 +162,7 @@ namespace NguyenLe_QuizProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(529, 512);
+            this.ClientSize = new System.Drawing.Size(534, 511);
             this.Controls.Add(this.pictureBoxFrage);
             this.Controls.Add(this.labelFrageNr);
             this.Controls.Add(this.buttonZumEinstellung);
@@ -170,6 +170,8 @@ namespace NguyenLe_QuizProject
             this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelFrage);
+            this.MaximumSize = new System.Drawing.Size(550, 550);
+            this.MinimumSize = new System.Drawing.Size(550, 550);
             this.Name = "HauptStad_Land";
             this.Text = "HauptStad_Land";
             this.groupBox1.ResumeLayout(false);
