@@ -55,25 +55,12 @@ namespace NguyenLe_QuizProject
             }
             shuffleLand(lands);
             // Achtung, DB has not enough entry for other continent to be selected beside 0
-            switch (continent)
+            if (continent != 0)
             {
-                case 1:
-                    lands.RemoveAll(s => s.Continent != 1);
-                    break;
-                case 2:
-                    lands.RemoveAll(s => s.Continent != 2);
-                    break;
-                case 3:
-                    lands.RemoveAll(s => s.Continent != 3);
-                    break;
-                case 4:
-                    lands.RemoveAll(s => s.Continent != 4);
-                    break;
-                case 5:
-                    lands.RemoveAll(s => s.Continent != 5);
-                    break;
-                
+
+            lands.RemoveAll(s => s.Continent != continent);
             }
+            
 
             // Show question/answer based on game mode selected from parent form
             switch (gameMode)

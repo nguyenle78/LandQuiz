@@ -1,0 +1,59 @@
+Logic bzw. Ablaufplan
+
+-ein List<Land> lands von Ländern aus DB, ORDER BY name
+
+-Bitmap[] flags aus Properties.Resource. Diese Bitmap files ist nach name genau wie im DM zugeordnet
+
+-Ordnen land aus lands mit ihre Flagge:
+  
+for (int i = 0; i < lands.Count(); i++)
+            {
+                lands[i].Flag = flags[i];
+            }
+
+
+-RadioButton[] answer = new RadioButton[4];
+
+-Ordnen den array answer[i] zu radioButton[i+1] 
+
+
+
+-labelFrage.Text = string.Format("Die Hauptstadt von {0} ist:", lands[questionNr].Name);
+
+-radioButton1.Text = lands[questionNr].Capital;
+
+-radioButton1 ist immer richtige Antwort
+
+-radioButton(1-4) possition shuffle 
+-prüft ob das radioButton1 ist gecheckt !
+
+
+
+
+
+Issue: 
+1. radioButton1 autochecked on start-up, marking the correct answer. 
+-> change Tabstop to false for each radiobutton. If AutoChecked is set to fasle, it prevent the radioButton to be checked again
+
+2. Wegen geringer Entry in Datenbank, Spiel modus nach Continent ist nicht möglich
+
+3. Wegen Properties.Resource, Erweiterung das Datenbank von User ist nicht möglich
+4. Program ist inresponsiv
+
+Test-case:
+
+1. Spiel starten, ohne Spielmodus oder Benutzer auszuwählen: 
+	-> Spielmodus als default ist: "Hauptstadt nach Land" und Continent als "Alle" ausgewählt
+	-> Benutzer als default ist "nguyen"
+2. "Neu Spieler" anclicken, ohne name einzugeben
+	-> Program reagiert nicht
+3. Spiel starten, mit den Continent als "Africa", "South America" oder "North America" ausgewhählt
+	-> Program reagiert nicht, wegen zu wenig Entry in Datenbank
+  
+
+
+
+
+
+
+

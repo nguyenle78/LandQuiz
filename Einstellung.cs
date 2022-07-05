@@ -22,10 +22,15 @@ namespace NguyenLe_QuizProject
 
         private void showStatistic()
         {
+            dataGridView1.Rows.Clear();
             statistics = database.getStatistic();
             foreach (Statistic statistic in statistics)
             {
-                dataGridView1.Rows.Add(statistic.User, statistic.Score, statistic.Datum);
+                if (statistic.User == comboBoxUser.Text || radioButton7.Checked)
+                {
+
+                    dataGridView1.Rows.Add(statistic.User, statistic.Score, statistic.Datum);
+                }
             }
         }
 
@@ -88,18 +93,24 @@ namespace NguyenLe_QuizProject
                 gameMode = 6;
             int continent;
 
-            continent = comboBoxContinent.SelectedIndex;           
+            continent = comboBoxContinent.SelectedIndex;
 
             User user = users[comboBoxUser.SelectedIndex];
-            HauptStad_Land newGame = new HauptStad_Land(user, this, gameMode,continent);
-            // hier werden später mit Spiel Modus wahlbar
+            HauptStad_Land newGame = new HauptStad_Land(user, this, gameMode, continent);
+
             this.Hide();
             newGame.Show();
         }
 
+
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Clear();
+            
+            showStatistic();
+        }
+
+        private void radioButton8_CheckedChanged(object sender, EventArgs e)
+        {
             showStatistic();
         }
     }
